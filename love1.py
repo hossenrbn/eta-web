@@ -12,7 +12,7 @@ def error():
 def enter():      
     #دریافت شماره تلفن از کاربر 
 
-    phon_number=int(input('شماره رو بده بیاد '))
+    phon_number=int(input('شماره تلفن را وارد نمایید '))
     driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div[1]/div/div[3]/div[2]/div[1]').send_keys(phon_number)
     driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div[1]/div/div[3]/button/div").click()
 
