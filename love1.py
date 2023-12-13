@@ -1,8 +1,16 @@
+'''
+import pandas as pd
+dr=pd.read_excel('011.xlsx')
+i=0
+'''
+
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options 
 from time import sleep
+options = Options() 
+options.add_argument("-headless")
 
-driver=webdriver.Firefox()
+driver=webdriver.Firefox(options=options)
 driver.get('https://web.eitaa.com/')
 sleep(5)
 #تایع بازگشت به اول 
@@ -12,7 +20,7 @@ def error():
 def enter():      
     #دریافت شماره تلفن از کاربر 
 
-    phon_number=int(input('شماره تلفن را وارد نمایید '))
+    phon_number=int(input('شماره رو بده بیاد '))
     driver.find_element_by_xpath('/html/body/div[1]/div/div[2]/div[1]/div/div[3]/div[2]/div[1]').send_keys(phon_number)
     driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div[1]/div/div[3]/button/div").click()
 
@@ -25,7 +33,7 @@ def enter():
         error()
         print('shomare eshtebah vared shode lotfan dobare say konid')
 
-def add_contact()     
+def add_contact(i):
     bog=[]# لیتی از افراد که به هر دلیلی نرم افزار اونارو باگ کرده
     havent=[] #لیستی که ایتا نداشتن 
     try:
@@ -33,7 +41,14 @@ def add_contact()
         sleep(3)
         driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div/div[2]/div[3]/div[3]/div[3]').click()
     except:
-        error()
+        try:
+            sleep(10)
+            driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div/div[2]/div[3]/div[1]').click()
+            sleep(3)
+            driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div/div[2]/div[3]/div[3]/div[3]').click()
+        except:
+            error()
+
         
     #adding phone number to eitaa 
     for number in dr['تلفن'][i:]:
@@ -47,6 +62,7 @@ def add_contact()
             sleep(4)
         except:
             continue
+            print('bog')
             bog.append(number)
             
         # -----------------   در صورت نداشتن ایتا به شخص بعدی رجوع میکند    -----------------------
@@ -55,10 +71,11 @@ def add_contact()
             havent.append(number)
 
         except:
+            havent.append(number)
             pass
         i+=1
         print(i)
-return print(bog,havent)
+    return print('boged',bog,'havnat=',havent)
         
 def send_massage(): 
     bog=[]
@@ -96,3 +113,4 @@ def send_massage():
 
     
 enter()
+add_contact(i)
