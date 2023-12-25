@@ -51,66 +51,111 @@ def add_contact(i):
 
         
     #adding phone number to eitaa 
-    for number in dr['تلفن'][i:]:
-        try:
-            sleep(3)
-            driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div[2]/div[2]/button/div').click()
-            sleep(2)
-            driver.find_element_by_xpath('/html/body/div[5]/div/div[2]/div[1]/div[1]').send_keys(str(dr['نام'][i]+' '+dr['نام خانوادگی'][i]))#name of contact
-            driver.find_element_by_xpath('/html/body/div[5]/div/div[3]/div[1]').send_keys(int(number))#number of contact
-            driver.find_element_by_xpath('/html/body/div[5]/div/div[1]/button/div').click()
-            sleep(4)
-        except:
+    for number in dr['تلفن همراه'][i:]:
+        if str(number)=='nan' :
+            i+=1
             continue
-            print('bog')
-            bog.append(number)
-            
-        # -----------------   در صورت نداشتن ایتا به شخص بعدی رجوع میکند    -----------------------
-        try:
-            driver.find_element_by_xpath('/html/body/div[5]/div/div[1]/span').click()
-            havent.append(number)
+        else:
+            try:
+                driver.find_element_by_xpath('/html/body/div[5]/div/div[1]/span').click()
+                havent.append(number)
 
-        except:
-            havent.append(number)
-            pass
-        i+=1
-        print(i)
-    return print('boged',bog,'havnat=',havent)
-        
-def send_massage(): 
-    bog=[]
-    for a in dr['name'] :
-        phone=dr['تلفن همراه'][i]
-        w=int(phone)
-        try:
-            driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div/div[2]/div[3]/div[1]').click()
-        except:
-            error()
-            send_massage()
-        try:    
-            sleep(3)
-            driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div/div[2]/div[3]/div[3]/div[3]').click()
-            sleep(3)
-            driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div[2]/div[1]/div/input').send_keys('+'+str(98)+str(w))
-            sleep(3)
-
+            except:
+                pass
 
             try:
-                driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div[2]/div[2]/div[2]/ul/li/div[1]').click()
+                sleep(3)
+                driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div[2]/div[2]/button/div').click()
+                sleep(2)
+                driver.find_element_by_xpath('/html/body/div[5]/div/div[2]/div[1]/div[1]').send_keys(str(dr['نام'][i]+' '+dr['نام خانوادگي'][i]))#name of contact
+                driver.find_element_by_xpath('/html/body/div[5]/div/div[3]/div[1]').send_keys(int(number))#number of contact
+                driver.find_element_by_xpath('/html/body/div[5]/div/div[1]/button/div').click()
+                sleep(4)
             except:
-                driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div[2]/div[1]/button').click()
-                i+=1
-                continue  
-            sleep(3)
-            driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[2]/div/div/div[4]/div/div[1]/div[7]/div[1]/div[1]').send_keys('this name is'+str(a)+'text for sending to evreone ')
-            sleep(2)
-            driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[2]/div/div/div[4]/div/div[4]/button/div').click()
-            sleep(3)
-            i+=1
-        except:
-            continue
-            bog.append(w)
+                try:
+                    sleep(10)
+                    driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div[2]/div[2]/button/div').click()
+                    sleep(2)
+                    driver.find_element_by_xpath('/html/body/div[5]/div/div[2]/div[1]/div[1]').send_keys(str(dr['نام'][i]+' '+dr['نام خانوادگي'][i]))#name of contact
+                    driver.find_element_by_xpath('/html/body/div[5]/div/div[3]/div[1]').send_keys(int(number))#number of contact
+                    driver.find_element_by_xpath('/html/body/div[5]/div/div[1]/button/div').click()
+                    sleep(4)
+                except:
+                    try:
+                        driver.find_element_by_xpath('/html/body/div[5]/div/div[1]/span').click()
+                        havent.append(number)
+                        
+                    except:
+                        print('bog')
+                        bog.append(number)
+                        i+=1
+                        continue
+            # -----------------   در صورت نداشتن ایتا به شخص بعدی رجوع میکند    -----------------------
+            try:
+                driver.find_element_by_xpath('/html/body/div[5]/div/div[1]/span').click()
+                havent.append(number)
 
+            except:
+                pass
+            i+=1
+            print(i)
+    driver. close()
+    return print('boged',bog,'havnat=',havent)
+        
+def send_massage(i): 
+
+    bog=[]
+    for a in dr['شماره دانشجو'] :
+        if str(a)=='nan' :
+            i+=1
+            continue
+        else:
+            phone=dr['تلفن همراه'][i]
+            w=int(phone)
+            z=dr['نام'][i]+' '+dr['نام خانوادگي'][i]
+            text_to_send=f'''
+    🔷اطلاعیه آموزشی 🔷
+    جناب  {z} دانشجوی محترم دکترای گروه حقوق بین الملل
+    سلام علیکم 
+    امتحان آزمون جامع گروه حقوق بین الملل در تاریخ 26/10/402 برگزار خواهد شد.
+    در صورت نیاز به راهنمائی به  آی دی ایتا : 
+    @lawFaculty
+    یا با شماره 02532103624 تماس حاصل فرمائید 
+    با تشکر و تقدیم احترام 
+    آموزش دانشکده حقوق
+    '''
+            try:
+                driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div/div[2]/div[3]/div[1]').click()
+            except:
+                error()
+                send_massage()
+            try:    
+                sleep(3)
+                driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div/div[2]/div[3]/div[3]/div[3]').click()
+                sleep(3)
+                driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div[2]/div[1]/div/input').send_keys('+'+str(98)+str(w))
+                sleep(3)
+
+
+                try:
+                    driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div[2]/div[2]/div[2]/ul/li/div[1]').click()
+                except:
+                    driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[1]/div/div[2]/div[1]/button').click()
+                    i+=1
+                    continue  
+                sleep(3)
+                driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[2]/div/div/div[4]/div/div[1]/div[7]/div[1]/div[1]').send_keys(text_to_send)
+                sleep(2)
+                driver.find_element_by_xpath('/html/body/div[2]/div[1]/div[2]/div/div/div[4]/div/div[4]/button/div').click()
+                sleep(3)
+                i+=1
+            except:
+                continue
+                bog.append(w)
+
+            print(i)
+    driver. close()
+    return print(bog)
     
 enter()
 add_contact(i)
